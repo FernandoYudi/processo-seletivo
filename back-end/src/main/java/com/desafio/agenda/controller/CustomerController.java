@@ -39,9 +39,7 @@ public class CustomerController{
         if (customer != null) {
             return customerRepository.save(customer);
         } else {
-            // Lógica para lidar com o objeto nulo, como lançar uma exceção ou retornar um status de erro
-            // Aqui você pode decidir o comportamento adequado para a sua aplicação
-            // Retorne null ou lance uma exceção, dependendo do caso
+
             return null;
         }
     }

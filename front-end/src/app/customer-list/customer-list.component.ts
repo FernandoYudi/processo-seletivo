@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Customer } from '../customer';
 import { CustomerService } from '../customer.service';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-customer-list',
@@ -11,8 +12,10 @@ import { Router } from '@angular/router';
 export class CustomerListComponent implements OnInit {
 
   customers: Customer[] = [];
+  emailSent: boolean = false;
 
-  constructor(private customerService: CustomerService, private router: Router) { }
+  constructor(private customerService: CustomerService, private router: Router,
+    private location: Location) { }
 
   ngOnInit(): void {
     this.getCustomers();
@@ -33,12 +36,31 @@ export class CustomerListComponent implements OnInit {
     this.router.navigate(['customer-profile', id]);
   }
 
+  sendNotificationEmail() {
+    this.customerService.sendNotificationEmail().subscribe(
+      response => {
+        console.log('Email enviado com sucesso:', response);
+      },
+      error => {
+        console.error('Erro ao enviar email:', error);
+      }
+    );
+  }
+
   deleteCustomer(id: number) {
     if (window.confirm('Tem certeza que deseja apagar este cliente?')) {
       this.customerService.deleteCustomer(id).subscribe(data => {
         console.log(data);
+        this.emailSent = true;
+        this.sendNotificationEmail();
         this.getCustomers();
       });
     }
+  }
+
+  redirectRouteCustomerList() {
+    setTimeout(() => {
+      window.location.reload();
+    }, 1500);
   }
 }

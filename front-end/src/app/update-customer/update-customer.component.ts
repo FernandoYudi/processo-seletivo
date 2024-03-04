@@ -12,7 +12,8 @@ export class UpdateCustomerComponent implements OnInit {
 
   id: number = 0;
   customer: Customer = new Customer();
-  errorMessage: string = ''; // Mensagem de erro para exibir ao usuário
+  errorMessage: string = '';
+  emailSent: boolean = false;
 
   constructor(private customerService: CustomerService,
               private route: ActivatedRoute,
@@ -64,6 +65,17 @@ export class UpdateCustomerComponent implements OnInit {
     return true;
   }
 
+  sendNotificationEmail() {
+    this.customerService.sendNotificationEmail().subscribe(
+      response => {
+        console.log('Email enviado com sucesso:', response);
+      },
+      error => {
+        console.error('Erro ao enviar email:', error);
+      }
+    );
+  }
+
   onSubmit(){
     if (!this.customer.firstName || !this.customer.lastName || !this.customer.emailId) {
       this.errorMessage = 'Por favor, preencha todos os campos obrigatórios.';
@@ -81,11 +93,15 @@ export class UpdateCustomerComponent implements OnInit {
     } 
 
     this.customerService.updateCustomer(this.id, this.customer).subscribe(data =>{
+      this.emailSent = true;
+      this.sendNotificationEmail();
       this.redirectRouteCustomerList();
     }, error => console.log(error));
   }
 
-  redirectRouteCustomerList(){
-    this.router.navigate(['/customers']);
+  redirectRouteCustomerList() {
+    setTimeout(() => {
+      this.router.navigate(['/customers']);
+    }, 1500);
   }
 }

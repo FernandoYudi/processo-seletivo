@@ -4,6 +4,8 @@
 
         <p class="text-danger" *ngIf="errorMessage">{{ errorMessage }}</p>
 
+        <p class="text-success" *ngIf="emailSent">Email de notificação enviado com sucesso!</p>
+
         <div class="form-group">
             <label>Primeiro Nome</label>
             <input type="text" class="form-control" id="firstName"

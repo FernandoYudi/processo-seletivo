@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Customer } from '../customer';
 import { CustomerService } from '../customer.service';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-create-customer',
